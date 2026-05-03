@@ -7,7 +7,8 @@
   <style>
     body { 
       margin: 0; padding: 0; font-family: sans-serif; 
-      background-color: #fff0f5; 
+      /* 元の水色に戻しました */
+      background-color: #e0f2f7; 
       display: flex; flex-direction: column; 
       height: 100vh; height: 100dvh; overflow: hidden;
     }
@@ -24,12 +25,14 @@
       word-wrap: break-word; line-height: 1.5;
     }
 
-    .user-msg { align-self: flex-end; background-color: #ff69b4; color: white; border-bottom-right-radius: 2px; }
-    .ai-msg { align-self: flex-start; background-color: white; border: 1px solid #ffb6c1; border-bottom-left-radius: 2px; }
+    /* ユーザーメッセージ：元の青色 */
+    .user-msg { align-self: flex-end; background-color: #007bff; color: white; border-bottom-right-radius: 2px; }
+    /* AIメッセージ：白背景に元の薄い水色の枠線 */
+    .ai-msg { align-self: flex-start; background-color: white; border: 1px solid #b3e5fc; border-bottom-left-radius: 2px; }
 
-    /* --- 追加：生成中メッセージの点滅アニメーション --- */
+    /* 生成中メッセージの点滅（色を水色系に調整） */
     .typing { 
-      align-self: flex-start; background-color: #fce4ec; color: #ad1457; 
+      align-self: flex-start; background-color: #e1f5fe; color: #0277bd; 
       font-size: 13px; padding: 8px 12px; border-radius: 15px; 
       animation: blink 1.5s infinite; 
     }
@@ -41,26 +44,27 @@
 
     #input-area { 
       background-color: white; padding: 10px 10px env(safe-area-inset-bottom);
-      border-top: 1px solid #ffb6c1; display: flex; gap: 8px; align-items: center;
+      border-top: 1px solid #b3e5fc; display: flex; gap: 8px; align-items: center;
     }
 
     textarea { 
-      flex: 1; padding: 10px; border: 1px solid #ffb6c1; border-radius: 20px; 
+      flex: 1; padding: 10px; border: 1px solid #b3e5fc; border-radius: 20px; 
       font-size: 16px; outline: none; resize: none; max-height: 100px;
     }
 
     button { 
-      padding: 0 12px; background-color: #ff69b4; color: white; 
+      padding: 0 12px; background-color: #007bff; color: white; 
       border: none; border-radius: 20px; height: 40px; font-weight: bold; cursor: pointer; flex-shrink: 0;
     }
 
     .icon-btn { 
-      background-color: #fff0f6; color: #333; font-size: 18px; width: 44px; height: 44px; 
+      background-color: #f0f0f0; color: #333; font-size: 18px; width: 44px; height: 44px; 
       display: flex; align-items: center; justify-content: center; 
-      border-radius: 50%; border: 1px solid #ffb6c1;
+      border-radius: 50%; border: 1px solid #b3e5fc;
     }
 
-    #mic-btn.recording { background-color: #ff1493; color: white; animation: pulse 1.5s infinite; }
+    /* 録音中の色は分かりやすく赤色のままにしています */
+    #mic-btn.recording { background-color: #ff4d4d; color: white; animation: pulse 1.5s infinite; }
     #speaker-btn.off { color: #aaa; background-color: #eee; }
 
     @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
@@ -128,7 +132,6 @@
       appendMessage('user-msg', msg);
       input.value = '';
 
-      // --- 追加：返答を生成中の表示を作成 ---
       const typingIndicator = document.createElement('div');
       typingIndicator.className = 'message typing';
       typingIndicator.innerText = "返答を生成中...";
@@ -142,7 +145,6 @@
         });
         const data = await response.json();
         
-        // 生成中を消してから本番のメッセージを表示
         chatContainer.removeChild(typingIndicator);
         appendMessage('ai-msg', data.reply);
         speak(data.reply);
