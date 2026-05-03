@@ -121,6 +121,12 @@
       window.speechSynthesis.cancel();
       const uttr = new SpeechSynthesisUtterance(text);
       uttr.lang = 'ja-JP';
+
+      // --- ここを追加・変更 ---
+      uttr.rate = 1.3;  // 読み上げ速度（0.1〜10.0の間で設定。1.0が標準、1.3が少し早め）
+      uttr.pitch = 1.0; // 声の高さ（0.0〜2.0の間。1.0が標準）
+      // ----------------------
+
       window.speechSynthesis.speak(uttr);
     }
 
